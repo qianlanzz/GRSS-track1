@@ -46,11 +46,9 @@ def train_augm(sample, size=512):
                     brightness_limit=0.3, contrast_limit=0.3, p=1
                 ),
                 A.RandomGamma(gamma_limit=(70, 130), p=1),
-                A.ChannelShuffle(p=0.2),
                 A.HueSaturationValue(
                     hue_shift_limit=30, sat_shift_limit=40, val_shift_limit=30, p=1
                 ),
-                A.RGBShift(r_shift_limit=30, g_shift_limit=30, b_shift_limit=30, p=1),
             ],
             p=0.8,
         ),
@@ -60,7 +58,7 @@ def train_augm(sample, size=512):
                 A.ElasticTransform(p=1),
                 A.OpticalDistortion(p=1),
                 A.GridDistortion(p=1),
-                A.IAAPerspective(p=1),
+                A.Perspective(scale=(0.05, 0.1), keep_size=True, p=1)
             ],
             p=0.2,
         ),
@@ -69,13 +67,59 @@ def train_augm(sample, size=512):
             [
                 A.GaussNoise(p=1),
                 A.MultiplicativeNoise(p=1),
-                A.IAASharpen(p=1),
+                A.Sharpen(alpha=(0.2, 0.5), lightness=(0.5, 1.0), p=1),
                 A.GaussianBlur(p=1),
             ],
             p=0.2,
         ),
     ]
     return A.Compose(augms)(image=sample["image"], mask=sample["mask"])
+
+
+def train_augm_zz(sample, size=512):
+    augms = [
+        # 几何变换
+        A.ShiftScaleRotate(scale_limit=0.2, rotate_limit=45, border_mode=0, value=0, p=0.7),
+        A.RandomCrop(size, size, p=1.0),
+        A.Flip(p=0.75),
+        A.Perspective(scale=(0.05, 0.1), keep_size=True, p=0.2),
+        
+        # 噪声模拟
+        A.OneOf(
+            [
+                A.GaussNoise(p=1),
+                A.MultiplicativeNoise(p=1),
+                A.GaussianBlur(p=1),
+                A.Sharpen(alpha=(0.2, 0.5), lightness=(0.5, 1.0), p=1),
+            ],
+            p=0.3,
+        ),
+        
+        # 颜色变换
+        A.OneOf(
+            [
+                A.RandomBrightnessContrast(brightness_limit=0.3, contrast_limit=0.3, p=1),
+                A.RandomGamma(gamma_limit=(70, 130), p=1),
+                A.HueSaturationValue(hue_shift_limit=30, sat_shift_limit=40, val_shift_limit=30, p=1),
+            ],
+            p=0.8,
+        ),
+        
+        # 分割掩膜处理
+        A.MaskDropout(max_objects=3, image_fill_value=0, mask_fill_value=0, p=0.1),
+        
+        # 弹性变换与失真
+        A.OneOf(
+            [
+                A.ElasticTransform(p=0.5),
+                A.OpticalDistortion(p=0.5),
+                A.GridDistortion(p=0.5),
+            ],
+            p=0.3,
+        ),
+    ]
+    return A.Compose(augms)(image=sample["image"], mask=sample["mask"])
+
 
 def train_augm3(sample, size=512):
     augms = [

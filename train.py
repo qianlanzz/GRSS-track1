@@ -1,5 +1,5 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 import time
 import numpy as np
 import time
@@ -164,15 +164,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Model Training')
     parser.add_argument('--seed', default=0)
     parser.add_argument('--n_epochs', default=100)
-    parser.add_argument('--batch_size', default=8)
+    parser.add_argument('--batch_size', default=2)
     parser.add_argument('--num_workers', default=8)
     parser.add_argument('--crop_size', default=512)
     parser.add_argument('--learning_rate', default=0.0001)  
     parser.add_argument('--classes', default=[1, 2, 3, 4, 5, 6, 7, 8])
-    parser.add_argument('--data_root', default="dataset/train")
+    parser.add_argument('--data_root', default="/data/zzq/zz/dataset_track1/train")
     parser.add_argument('--save_model', default="model") 
     parser.add_argument('--save_results', default="results")
-    parser.add_argument('--resume', default="model/unetplusplus-efficientnet-b4/SAR_Pesudo_unetplusplus-efficientnet-b4_s0_CELoss_0.3403733325815656.pth")
+    parser.add_argument('--resume', default="")
     args = parser.parse_args()
     
     start = time.time()
