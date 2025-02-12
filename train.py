@@ -79,7 +79,7 @@ def train_model(args, model, optimizer, criterion, metric, device):
             max_score = score
             torch.save(model.state_dict(), os.path.join(args.save_model, model.name, f"{model_name}_{max_score}.pth"))
             print("Model saved in the folder : ", args.save_model)
-            print("Model name is : ", model_name)
+            print("Model name is : ", f"{model_name}_{max_score}.pth")
      
             
 def main(args):
@@ -172,7 +172,7 @@ if __name__ == "__main__":
     parser.add_argument('--data_root', default="/data/zzq/zz/dataset_track1/train")
     parser.add_argument('--save_model', default="model") 
     parser.add_argument('--save_results', default="results")
-    parser.add_argument('--resume', default="")
+    parser.add_argument('--resume', default="resume/SAR_Pesudo_unetplusplus-efficientnet-b4_s0_CELoss_0.36942653514381807.pth")
     args = parser.parse_args()
     
     start = time.time()
