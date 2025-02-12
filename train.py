@@ -20,7 +20,7 @@ def data_loader(args):
     # Shuffle the paths to randomize the selection
     random.shuffle(img_pths)
     # split data: 90% training and 10% validation
-    split_idx= int(0.9 * len(img_pths))  
+    split_idx= int(0.9 * len(img_pths))
     train_pths = img_pths[:split_idx]
     val_pths = img_pths[split_idx:]
     # convert paths to strings (if needed)
@@ -163,10 +163,10 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Model Training')
     parser.add_argument('--seed', default=0)
-    parser.add_argument('--n_epochs', default=100)
-    parser.add_argument('--batch_size', default=2)
-    parser.add_argument('--num_workers', default=8)
-    parser.add_argument('--crop_size', default=512)
+    parser.add_argument('--n_epochs',type=int, default=100)
+    parser.add_argument('--batch_size',type=int, default=2)
+    parser.add_argument('--num_workers',type=int, default=8)
+    parser.add_argument('--crop_size',type=int, default=512)
     parser.add_argument('--learning_rate', default=0.0001)  
     parser.add_argument('--classes', default=[1, 2, 3, 4, 5, 6, 7, 8])
     parser.add_argument('--data_root', default="/data/zzq/zz/dataset_track1/train")
